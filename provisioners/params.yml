@@ -1,5 +1,5 @@
-repo_oss_name: "osl150-oss"
-repo_oss_url: "http://download.opensuse.org/distribution/leap/15.0/repo/oss"
+repo_oss_name: "osl151-oss"
+repo_oss_url: "http://download.opensuse.org/distribution/leap/15.1/repo/oss"
 
-repo_oss_upd_name: "osl150-oss-up"
-repo_oss_upd_url: "http://download.opensuse.org/update/leap/15.0/oss"
+repo_oss_upd_name: "osl151-oss-up"
+repo_oss_upd_url: "http://download.opensuse.org/update/leap/15.1/oss"

@@ -1,0 +1,83 @@
+{
+  "variables":
+  {
+    "dist": "openSUSE-Leap",
+    "dist_ver": "15.1",
+
+    "iso_url": "https://download.opensuse.org/distribution/leap/15.1/iso/openSUSE-Leap-15.1-NET-x86_64.iso",
+    "iso_checksum_url": "sha256:609d0ad527ab13681b44e28326cd7941e87adfe8d522e2b31d0d7c71e9d92992",
+
+    "out_dir_prefix": "/tmp/packer_out",
+
+    "memory": "2048",
+    "cpus": "2",
+    "os_disk_size": "25600"
+  },
+
+  "builders": [
+    {
+      "name": "libvirt",
+      "type": "qemu",
+
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum_url": "{{user `iso_checksum_url`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+
+      "output_directory": "{{user `out_dir_prefix`}}/{{user `dist`}}-{{user `dist_ver`}}-{{build_name}}",
+
+      "accelerator": "kvm",
+      "vm_name": "{{user `dist`}}-{{user `dist_ver`}}.qcow2",
+      "net_device": "virtio-net",
+      "disk_interface": "virtio",
+      "disk_size": "{{user `os_disk_size`}}",
+      "format": "qcow2",
+      "disk_compression": true,
+
+      "qemuargs": [
+        [ "-m", "{{user `memory`}}M" ]
+      ],
+
+      "ssh_username": "root",
+      "ssh_password": "topsecret",
+      "ssh_port": 22,
+      "ssh_timeout": "120m",
+
+      "http_directory": "autoyast",
+
+      "boot_command": [
+        "<wait5><esc><enter><wait>",
+        "linux ",
+        "lang=en_US ",
+        "textmode=1 ",
+        "autoyast2=http://{{.HTTPIP}}:{{.HTTPPort}}/leap151do.ai.qemu.xml",
+        "<enter>"
+      ],
+
+      "shutdown_command": "shutdown -P now",
+
+      "headless": true
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "ansible",
+      "pause_before": "5m",
+      "playbook_file": "../provisioners/leap151do.playbook.yml",
+      "ansible_env_vars": [
+        "ANSIBLE_SSH_USER=root",
+        "ANSIBLE_HOST_KEY_CHECKING=False",
+        "ANSIBLE_RETRY_FILES_ENABLED=False",
+        "ANSIBLE_SSH_ARGS='-C -o ControlMaster=auto -o ControlPersist=60s -o UserKnownHostsFile=/dev/null'"
+      ]
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "compress",
+      "output": "{{user `out_dir_prefix`}}/{{user `dist`}}-{{user `dist_ver`}}.qcow2.gz",
+      "compression_level": 9
+    }
+  ]
+}
