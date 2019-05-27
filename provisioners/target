@@ -1,5 +1,5 @@
 [do_vm]
-leap150do.colder.xyz
+leap151do.colder.xyz
 
 [do_vm:vars]
 ansible_ssh_user=root
