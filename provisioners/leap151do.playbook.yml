@@ -66,7 +66,7 @@
 
   - name: Remove certain packages we do not need anymore
     zypper:
-      name: ['qemu-guest-agent', 'btrfsprogs-udev-rules', 'postfix']
+      name: ['qemu-guest-agent', 'postfix']
       state: absent
  
   - name: Apply any package updates
