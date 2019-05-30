@@ -15,11 +15,13 @@ Fire up your favorite terminal application, clone this GitHub repository and cha
 	git clone https://github.com/colder-is-better/digitalocean-custom-images.git
 	cd digitalocean-custom-images
 
-Delete all files in directory `provisioners/ssh_keys` and then create one or more new `*.pub` files. Each one of the new `*.pub` files should contain a single public SSH key you own. All those keys will be included in the `authorized_keys` file of user root, in the custom image you are about to create. Change into the `definitions` directory and start a new Packer build:
+Delete all files in directory `provisioners/ssh_keys` and then create one or more new `*.pub` files. Each one of the new `*.pub` files should contain a single public SSH key you own. All those keys will be included in the `authorized_keys` file of user root, in the custom image you are about to create.
+
+Change into the `definitions` directory and start a new Packer build:
 
 	PACKER_CACHE_DIR=/tmp/packer_cache ~/bin/packer build leap151do.json
 
-To the `PACKER_CACHE_DIR` variable, be careful to assign a full path to an existing directory: this is where Packer will be saving ISO images into. From the example above, it is apparent that we keep the `packer` executable in the `bin` directory of our user's home. You may of course have `packer` under a different directory, so adjust your command invocation accordingly.
+To the `PACKER_CACHE_DIR` variable, be careful to assign a full path to an existing directory: this is where Packer will be saving ISO images into. From the example above, it is apparent that we keep the `packer` executable in the `bin` directory in our user's home. You may of course have `packer` tucked in a different directory, so adjust your command invocation accordingly.
 
 When Packer finishes preparing the image (the build may take some time, so be patient), it leaves us with a compressed QCOW2 file: that would be `openSUSE-Leap-15.1.qcow2.gz`, under `/tmp/packer_out`. This is the file you should upload to your account in DigitalOcean, and keep it there as a _custom image_. Off of that image you may create any number of droplets of any size. More details on how to upload custom images and spawn droplets based on them, are available in the [official documentation](https://www.digitalocean.com/docs/images/custom-images/how-to).
 
